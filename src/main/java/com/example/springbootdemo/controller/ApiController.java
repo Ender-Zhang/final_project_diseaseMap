@@ -6,11 +6,9 @@ import com.example.springbootdemo.bean.Doctor;
 import com.example.springbootdemo.bean.Patient;
 import com.example.springbootdemo.bean.Reminder;
 import com.example.springbootdemo.bean.User;
+import com.example.springbootdemo.bean.Admin;
 import com.example.springbootdemo.dao.DoctorRepository;
-import com.example.springbootdemo.service.DoctorService;
-import com.example.springbootdemo.service.PatientService;
-import com.example.springbootdemo.service.ReminderService;
-import com.example.springbootdemo.service.UserService;
+import com.example.springbootdemo.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,6 +30,9 @@ public class ApiController {
 
     @Autowired
     private ReminderService reminderService;
+
+    @Autowired
+    private AdminService adminService;
 
     @GetMapping("/init")
     public String init() {
@@ -111,5 +112,18 @@ public class ApiController {
     public Integer addReminder(@RequestParam String content, @RequestParam String date, @RequestParam String time, @RequestParam String type, @RequestParam Integer patient_id, @RequestParam Integer doctor_id) {
         return reminderService.addReminder(content, date, time, type, patient_id, doctor_id);
     }
+
+    @GetMapping("/adminByName/{username}")
+    public Admin getAdminByName(@PathVariable("username") String username) {
+        return adminService.getByName(username);
+    }
+
+    @RequestMapping("/isDoctor")
+    public Boolean isDoctor(@RequestParam Long id, @RequestParam String password) {
+//        return userService.isDoctor(id);
+        return doctorService.isDoctor(id, password);
+//        return true;
+    }
+
 }
 
