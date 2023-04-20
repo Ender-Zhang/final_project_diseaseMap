@@ -118,10 +118,10 @@ public class ApiController {
         return adminService.getByName(username);
     }
 
-    @RequestMapping("/isDoctor")
-    public Boolean isDoctor(@RequestParam Long id, @RequestParam String password) {
+    @RequestMapping("/isAdmin")
+    public Boolean isAdmin(@RequestParam Long id, @RequestParam String password) {
 //        return userService.isDoctor(id);
-        return doctorService.isDoctor(id, password);
+        return adminService.isAdmin(id, password);
 //        return true;
     }
 

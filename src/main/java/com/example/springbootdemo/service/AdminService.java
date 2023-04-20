@@ -17,17 +17,33 @@ import com.example.springbootdemo.bean.User;
         import org.springframework.data.domain.Pageable;
         import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 @Service("adminService")
 public class AdminService {
     @Autowired
-    private AdminRepository adminRepository;
+    private AdminRepository AdminRepository;
 
     public Admin getUserByID(Long id){
-        return adminRepository.findById(id).get();
+        return AdminRepository.findById(id).get();
     }
 
     public Admin getByName(String username) {
-        return adminRepository.findByName(username);
+        return AdminRepository.findByName(username);
+    }
+
+    public boolean isAdmin(Long id, String password){
+        try {
+            Optional<Admin> adminOptional = AdminRepository.findById(id);
+            if (adminOptional.isPresent() && adminOptional.get().getPassword().equals(password)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 
 //    public User getByName(String name){
