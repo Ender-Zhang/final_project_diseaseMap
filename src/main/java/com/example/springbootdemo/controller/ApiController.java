@@ -2,18 +2,17 @@ package com.example.springbootdemo.controller;
 
 
 
-import com.example.springbootdemo.bean.Doctor;
-import com.example.springbootdemo.bean.Patient;
-import com.example.springbootdemo.bean.Reminder;
-import com.example.springbootdemo.bean.User;
-import com.example.springbootdemo.bean.Admin;
+import com.example.springbootdemo.bean.*;
 import com.example.springbootdemo.dao.DoctorRepository;
 import com.example.springbootdemo.service.*;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -33,6 +32,9 @@ public class ApiController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private StatesService statesService;
 
     @GetMapping("/init")
     public String init() {
@@ -127,6 +129,43 @@ public class ApiController {
 //        return userService.isDoctor(id);
         return adminService.isAdmin(id, password);
 //        return true;
+    }
+
+    @RequestMapping("/getMap")
+    @CrossOrigin(origins = "http://127.0.0.1:5173")
+    public States getMap() {
+        return statesService.getByName("Alabama");
+    }
+
+
+    @RequestMapping("/getAllMap")
+    @CrossOrigin(origins = "http://127.0.0.1:5173")
+    public String getAllMap() {
+//        return statesService.getAllStates().getContent();
+        List listStates = statesService.getAllStates().getContent();
+        JSONObject stateJson = new JSONObject();
+        for(int i=0; i<listStates.size();i++){
+            States state = new States(listStates.get(i));
+
+            stateJson.put(state.getAbbreviation(), new JSONObject()
+                    .put("name", state.getName())
+                    .put("abbreviation", state.getAbbreviation())
+//                .put("commonDisease", getCommonDiseaseName(state.getCommonDiseaseId()))
+                    .put("id", state.getId())
+                    .put("commonDisease", state.getCommon_disease_id())
+                    .put("description", state.getDescription()));
+        }
+        String jsonString = stateJson.toString();
+
+
+        JSONObject jsonObject = new JSONObject();
+
+        // 向 JSON 对象中添加一些属性
+        jsonObject.put("name", "John");
+        jsonObject.put("age", 30);
+        jsonObject.put("isMarried", true);
+        return jsonString;
+
     }
 
 }
