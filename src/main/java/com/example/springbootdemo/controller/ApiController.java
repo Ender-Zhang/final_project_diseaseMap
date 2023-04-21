@@ -113,12 +113,16 @@ public class ApiController {
         return reminderService.addReminder(content, date, time, type, patient_id, doctor_id);
     }
 
+
     @GetMapping("/adminByName/{username}")
+    @CrossOrigin(origins = "http://127.0.0.1:5173")
     public Admin getAdminByName(@PathVariable("username") String username) {
         return adminService.getByName(username);
     }
 
+
     @RequestMapping("/isAdmin")
+    @CrossOrigin(origins = "http://127.0.0.1:5173")
     public Boolean isAdmin(@RequestParam Long id, @RequestParam String password) {
 //        return userService.isDoctor(id);
         return adminService.isAdmin(id, password);
