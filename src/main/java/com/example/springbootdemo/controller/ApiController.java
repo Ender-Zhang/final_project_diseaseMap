@@ -36,6 +36,9 @@ public class ApiController {
     @Autowired
     private StatesService statesService;
 
+    @Autowired
+    private DiseaseService diseaseService;
+
     @GetMapping("/init")
     public String init() {
 //        User user = null;
@@ -152,7 +155,7 @@ public class ApiController {
                     .put("abbreviation", state.getAbbreviation())
 //                .put("commonDisease", getCommonDiseaseName(state.getCommonDiseaseId()))
                     .put("id", state.getId())
-                    .put("commonDisease", state.getCommon_disease_id())
+                    .put("commonDisease", diseaseService.getNameById(state.getCommon_disease_id()))
                     .put("description", state.getDescription()));
         }
         String jsonString = stateJson.toString();
