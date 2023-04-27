@@ -3,17 +3,15 @@ package com.example.springbootdemo.controller;
 
 
 import com.example.springbootdemo.bean.*;
-import com.example.springbootdemo.dao.DoctorRepository;
 import com.example.springbootdemo.service.*;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/")
@@ -21,14 +19,6 @@ public class ApiController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private DoctorService doctorService;
-
-    @Autowired
-    private PatientService patientService;
-
-    @Autowired
-    private ReminderService reminderService;
 
     @Autowired
     private AdminService adminService;
@@ -38,6 +28,30 @@ public class ApiController {
 
     @Autowired
     private DiseaseService diseaseService;
+
+    @Autowired
+    private  TimeService timeService;
+
+    @Autowired
+    private  TransmissionModesService transmissionModesService;
+
+    @Autowired
+    private  DataSourcesService dataSourcesService;
+
+
+    @Autowired
+    private  ProtectiveMeasuresService protectiveMeasuresService;
+
+    @Autowired
+    private SymptomService symptomService;
+
+    @Autowired
+    private  MedicalFacilitiesService medicalFacilitiesService;
+
+
+
+
+
 
     @GetMapping("/init")
     public String init() {
@@ -50,73 +64,41 @@ public class ApiController {
         return "初始化完成。";
     }
 
-    @GetMapping("/userByName/{username}")
-    public User getUserByName(@PathVariable("username") String username) {
-        return userService.getByName(username);
+//    @GetMapping("/userByName/{username}")
+//    public User getUserByName(@PathVariable("username") String username) {
+//        return userService.getByName(username);
+//    }
+
+    @PostMapping("/userByName")
+    public User addUser(@RequestBody User user) {
+        return userService.postaddUser(user);
     }
 
-    @GetMapping("/userById/{userid}")
-    public User getUserById(@PathVariable("userid") Long userid) {
-        return userService.getUserByID(userid);
-    }
+//    @GetMapping("/userById/{userid}")
+//    public User getUserById(@PathVariable("userid") Long userid) {
+//        return userService.getUserByID(userid);
+//    }
 
-    @GetMapping("/page")
-    public Page<User> getPage() {
-        return userService.findPage();
-    }
+//    @GetMapping("/page")
+//    public Page<User> getPage() {
+//        return userService.findPage();
+//    }
 
-    @GetMapping("/page/{maxID}")
-    public Page<User> getPageByMaxID(@PathVariable("maxID") Long maxID) {
-        return userService.find(maxID);
-    }
+//    @GetMapping("/page/{maxID}")
+//    public Page<User> getPageByMaxID(@PathVariable("maxID") Long maxID) {
+//        return userService.find(maxID);
+//    }
 
-    @RequestMapping("/update/{id}/{name}")
-    public User update(@PathVariable Long id, @PathVariable String name) {
-        return userService.update(id, name);
-    }
+//    @RequestMapping("/update/{id}/{name}")
+//    public User update(@PathVariable Long id, @PathVariable String name) {
+//        return userService.update(id, name);
+//    }
 
-    @RequestMapping("/update/{id}")
-    public Boolean updateById(@PathVariable Long id) {
-        return userService.updateById("newName", id);
-    }
+//    @RequestMapping("/update/{id}")
+//    public Boolean updateById(@PathVariable Long id) {
+//        return userService.updateById("newName", id);
+//    }
 
-    @RequestMapping("/isDoctor")
-    public Boolean isDoctor(@RequestParam Long id, @RequestParam String password) {
-//        return userService.isDoctor(id);
-        return doctorService.isDoctor(id, password);
-//        return true;
-    }
-
-    @RequestMapping("/doctor/{id}")
-    public Doctor getDoctor(@PathVariable Integer id) {
-        return doctorService.getDoctorByIDAll(Long.valueOf(id));
-    }
-
-    @PostMapping("/doctor")
-    public Integer addDoctor(@RequestParam String name, @RequestParam String password) {
-        return doctorService.addDoctor(name, password);
-//        return doctorService.save(name, password);
-    }
-
-    @RequestMapping("/patient/{id}")
-    public Patient getPatient(@PathVariable Long id) {
-        return patientService.getPatientByID(id);
-    }
-
-    @PostMapping("/patient")
-    public Integer addPatient(@RequestParam String name, @RequestParam String password, @RequestParam String doctor_id) {
-        return patientService.addPatient(name, password, doctor_id);
-    }
-
-    @RequestMapping("/reminder/{id}")
-    public Reminder getReminder(@PathVariable Long id) {
-        return reminderService.getReminderByID(id);
-    }
-
-    @PostMapping("/reminder")
-    public Integer addReminder(@RequestParam String content, @RequestParam String date, @RequestParam String time, @RequestParam String type, @RequestParam Integer patient_id, @RequestParam Integer doctor_id) {
-        return reminderService.addReminder(content, date, time, type, patient_id, doctor_id);
-    }
 
 
     @GetMapping("/adminByName/{username}")
@@ -170,6 +152,55 @@ public class ApiController {
         return jsonString;
 
     }
+    @GetMapping ("/getTime/{id}")
+    @CrossOrigin(origins = "http://127.0.0.1:5173")
+    public String getTime(@PathVariable("id") Integer id) {
+        return timeService.findTimeById(id);
+    }
+
+    @GetMapping ("/getTransMethod/{id}")
+    @CrossOrigin(origins = "http://127.0.0.1:5173")
+    public String getTransMethod(@PathVariable("id") Integer id) {
+        System.out.println(id);
+        return transmissionModesService.findTMById(id);
+    }
+
+
+    @GetMapping ("/getDataSources/{id}")
+    @CrossOrigin(origins = "http://127.0.0.1:5173")
+    public String getDataSources(@PathVariable("id") Integer id) {
+        return dataSourcesService.findDataSourcesId(id);
+    }
+
+
+    @GetMapping ("/getProtectiveMeasures/{id}")
+    @CrossOrigin(origins = "http://127.0.0.1:5173")
+    public ArrayList<String> getProtectiveMeasures(@PathVariable("id") Integer id) {
+        return protectiveMeasuresService.findProtectiveMeasuresId(id);
+    }
+
+    @DeleteMapping("/Symptom/{id}")
+    @CrossOrigin(origins = "http://127.0.0.1:5173")
+    public String deleteUserById(@PathVariable Long id) {
+        symptomService.deleteUserById(id);
+        return "User with id: " + id + " has been deleted.";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @CrossOrigin(origins = "http://127.0.0.1:5173")
+    public ResponseEntity<Void> deleteMedicalFacility(@PathVariable("id") Integer id) {
+        medicalFacilitiesService.deleteMedicalFacilityById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/update")
+    @CrossOrigin(origins = "http://127.0.0.1:5173")
+    public ResponseEntity<MedicalFacilities> updateMedicalFacility(@RequestBody MedicalFacilities medicalFacility) {
+        MedicalFacilities updatedMedicalFacility = medicalFacilitiesService.updateMedicalFacility(medicalFacility);
+        return ResponseEntity.ok(updatedMedicalFacility);
+    }
+
+
 
 }
 
