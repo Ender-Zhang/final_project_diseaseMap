@@ -8,7 +8,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Accessors(chain = true)
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -186,14 +186,14 @@ public class ApiController {
         return "User with id: " + id + " has been deleted.";
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/medical_Fac_delete/{id}")
     @CrossOrigin(origins = "http://127.0.0.1:5173")
     public ResponseEntity<Void> deleteMedicalFacility(@PathVariable("id") Integer id) {
         medicalFacilitiesService.deleteMedicalFacilityById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/update")
+    @PutMapping("/medical_Fac_update")
     @CrossOrigin(origins = "http://127.0.0.1:5173")
     public ResponseEntity<MedicalFacilities> updateMedicalFacility(@RequestBody MedicalFacilities medicalFacility) {
         MedicalFacilities updatedMedicalFacility = medicalFacilitiesService.updateMedicalFacility(medicalFacility);
